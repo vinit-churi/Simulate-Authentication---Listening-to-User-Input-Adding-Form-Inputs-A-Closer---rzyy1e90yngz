@@ -11,9 +11,14 @@ const App = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const emailInput = useRef();
     const passwordInput = useRef();
+    const confirmPassInput = useRef();
     const nameInput = useRef();
+    const loginEmail = useRef();
+    const loginPassword = useRef();
     const handleSignup = (e) => {
         // e.preventDefault();
+        if (passwordInput.current.value !== confirmPassInput.current.value)
+            return;
         setSignupValue({
             email: emailInput.current.value,
             password: passwordInput.current.value,
@@ -21,7 +26,15 @@ const App = () => {
         });
     };
     const handleAuth = () => {
-        setIsLoggedIn((loginStatus) => !loginStatus);
+        if (
+            isLoggedIn === false &&
+            signupValue.email === loginEmail.current.value &&
+            signupValue.password === loginPassword.current.value
+        ) {
+            setIsLoggedIn((loginStatus) => true);
+        } else {
+            setIsLoggedIn((loginStatus) => false);
+        }
     };
     // const newUser = new User("email", "password", "name");
     return (
@@ -68,6 +81,7 @@ const App = () => {
                             Confirm Password
                         </label>
                         <input
+                            ref={confirmPassInput}
                             type="password"
                             name="signupConfirmPassword"
                             id="signupConfirmPassword"
@@ -78,9 +92,15 @@ const App = () => {
                     </button>
                     <form className="login-styles">
                         <label htmlFor="loginEmail">Email</label>
-                        <input id="loginEmail" name="loginEmail" type="email" />
+                        <input
+                            ref={loginEmail}
+                            id="loginEmail"
+                            name="loginEmail"
+                            type="email"
+                        />
                         <label htmlFor="loginPassword">Password</label>
                         <input
+                            ref={loginPassword}
                             id="loginPassword"
                             name="loginPassword"
                             type="password"
